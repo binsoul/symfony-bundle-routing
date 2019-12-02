@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     name="route",
  *     uniqueConstraints={
  *        @ORM\UniqueConstraint(columns={"website_id", "parent_id", "segment"}),
+ *        @ORM\UniqueConstraint(columns={"website_id", "name"}),
  *     }
  * )
  */
@@ -42,6 +43,12 @@ class RouteEntity
      * @ORM\JoinColumn(nullable=true)
      */
     private $parent;
+
+    /**
+     * @var string Name of the route
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $name;
 
     /**
      * @var string Path segment of the route
@@ -117,6 +124,16 @@ class RouteEntity
     public function setParent(?RouteEntity $parent): void
     {
         $this->parent = $parent;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getSegment(): string

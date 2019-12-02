@@ -54,6 +54,14 @@ class RouteRepository extends AbstractRepository
         return $this->getRepository()->findBy(['parent' => $route]);
     }
 
+    public function findByWebsiteAndName(WebsiteEntity $website, string $name): ?RouteEntity
+    {
+        /** @var RouteEntity|null $result */
+        $result = $this->getRepository()->findOneBy(['website' => $website, 'name' => $name]);
+
+        return $result;
+    }
+
     public function save(RouteEntity $entity, bool $flush = true): void
     {
         $manager = $this->getManager();
