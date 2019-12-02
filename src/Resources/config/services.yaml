@@ -4,6 +4,9 @@ services:
         autoconfigure: true
         public: false
 
+    BinSoul\Symfony\Bundle\Routing\ChainRouter:
+        public: true
+
     BinSoul\Symfony\Bundle\Routing\Repository\:
         resource: '../../Repository/*'
         public: true
