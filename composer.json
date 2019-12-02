@@ -1,11 +1,11 @@
 {
     "name": "binsoul/symfony-bundle-routing",
     "type": "symfony-bundle",
-    "description": "Website helpers",
+    "description": "Dynamic routing for Symfony using database entities",
     "keywords": [
         "symfony",
         "bundle",
-        "website"
+        "routing"
     ],
     "homepage": "https://github.com/binsoul/symfony-bundle-routing",
     "license": "MIT",
