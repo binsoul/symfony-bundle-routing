@@ -60,7 +60,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         $this->context = $context;
     }
 
-    public function match(string $pathInfo): array
+    public function match($pathInfo): array
     {
         $request = $this->rebuildRequest($pathInfo);
 
@@ -72,7 +72,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         return $this->handleMatch($request->getPathInfo(), $request);
     }
 
-    public function generate(string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generate($name, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         foreach ($this->routers as $routers) {
             foreach ($routers as $router) {
