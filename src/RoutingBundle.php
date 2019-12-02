@@ -15,6 +15,6 @@ class RoutingBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new OverrideRouterPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 16);
+        $container->addCompilerPass(new OverrideRouterPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -16);
     }
 }
