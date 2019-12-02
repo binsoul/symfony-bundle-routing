@@ -1,0 +1,61 @@
+{
+    "name": "binsoul/symfony-bundle-routing",
+    "type": "symfony-bundle",
+    "description": "Website helpers",
+    "keywords": [
+        "symfony",
+        "bundle",
+        "website"
+    ],
+    "homepage": "https://github.com/binsoul/symfony-bundle-routing",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastian Mößler",
+            "email": "s.moeszler@binsoul.de",
+            "homepage": "https://github.com/binsoul",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "binsoul/common-i18n": "*@dev",
+        "binsoul/common-i18n-intl": "*@dev",
+        "binsoul/symfony-bundle-doctrine": "*@dev",
+        "binsoul/symfony-bundle-i18n": "*@dev",
+        "binsoul/symfony-bundle-website": "*@dev",
+        "doctrine/orm": "^2",
+        "symfony/config": "^4|^5",
+        "symfony/dependency-injection": "^4|^5",
+        "symfony/http-kernel": "^4|^5",
+        "twig/twig": "^3.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2",
+        "phpstan/phpstan": "^0.11",
+        "phpunit/phpunit": "^8"
+    },
+    "autoload": {
+        "psr-4": {
+            "BinSoul\\Symfony\\Bundle\\Routing\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BinSoul\\Test\\Symfony\\Bundle\\Routing\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "fix-style": [
+            "php-cs-fixer fix src --rules=@Symfony,-yoda_style",
+            "php-cs-fixer fix tests --rules=@Symfony,-yoda_style"
+        ],
+        "analyze": "phpstan analyse -l 7 src"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
