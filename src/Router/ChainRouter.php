@@ -1,11 +1,10 @@
 <?php
 
-namespace BinSoul\Symfony\Bundle\Routing;
+namespace BinSoul\Symfony\Bundle\Routing\Router;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
@@ -128,7 +127,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
                     }
 
                     return $router->match($pathInfo);
-                } catch (ResourceNotFoundException $e) {
+                } catch (RouteNotFoundException $e) {
                     // ignore
                 } catch (MethodNotAllowedException $e) {
                     $methodNotAllowed = $e;
@@ -136,7 +135,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
             }
         }
 
-        throw $methodNotAllowed ?: new ResourceNotFoundException(sprintf('None of the routers in the chain matched "%s".', $pathInfo));
+        throw $methodNotAllowed ?: new RouteNotFoundException(sprintf('None of the routers in the chain matched "%s".', $pathInfo));
     }
 
     private function rebuildRequest(string $pathInfo): Request

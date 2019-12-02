@@ -2,7 +2,8 @@
 
 namespace BinSoul\Symfony\Bundle\Routing\DependencyInjection\Compiler;
 
-use BinSoul\Symfony\Bundle\Routing\ChainRouter;
+use BinSoul\Symfony\Bundle\Routing\Router\ChainRouter;
+use BinSoul\Symfony\Bundle\Routing\Router\DatabaseRouter;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -16,6 +17,10 @@ class OverrideRouterPass implements CompilerPassInterface
         }
 
         $definition = $container->getDefinition(ChainRouter::class);
+
+        if ($container->hasDefinition(DatabaseRouter::class)) {
+            $definition->addMethodCall('addRouter', [new Reference(DatabaseRouter::class), 16]);
+        }
 
         if ($container->hasAlias('router')) {
             $alias = $container->getAlias('router');
