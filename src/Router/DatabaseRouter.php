@@ -60,16 +60,15 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
     public function __construct(
         RouteRepository $routeRepository,
         RouteTranslationRepository $routeTranslationRepository,
-        DomainRepository $domainRepository
+        DomainRepository $domainRepository,
+        RequestContext $context = null
     ) {
         $this->domainRepository = $domainRepository;
         $this->routeRepository = $routeRepository;
         $this->routeTranslationRepository = $routeTranslationRepository;
+        $this->context = $context ?: new RequestContext();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generate($name, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         /** @var DomainEntity|null $domain */
@@ -157,9 +156,6 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         return $result.(\count($query) ? '?'.http_build_query($query) : '');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function matchRequest(Request $request)
     {
         /** @var DomainEntity|null $domain */
@@ -274,20 +270,17 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         return $this->matchRequest($this->rebuildRequest($pathInfo));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setContext(RequestContext $context)
+    public function setContext(RequestContext $context): void
     {
         $this->context = $context;
     }
 
-    public function getContext()
+    public function getContext(): RequestContext
     {
         return $this->context;
     }
 
-    public function getRouteCollection()
+    public function getRouteCollection(): RouteCollection
     {
         return new RouteCollection();
     }

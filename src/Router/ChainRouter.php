@@ -18,13 +18,21 @@ use Symfony\Component\Routing\RouterInterface;
 class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableInterface
 {
     /**
-     * @var RequestContext|null
+     * @var RequestContext
      */
     private $context;
     /**
      * @var RouterInterface[][]
      */
     private $routers = [];
+
+    /**
+     * Constructs an instance of this class.
+     */
+    public function __construct(RequestContext $context = null)
+    {
+        $this->context = $context ?: new RequestContext();
+    }
 
     /**
      * @param RouterInterface|RequestMatcherInterface|UrlGeneratorInterface $router
@@ -47,10 +55,6 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
 
     public function getContext(): RequestContext
     {
-        if (!$this->context) {
-            $this->context = new RequestContext();
-        }
-
         return $this->context;
     }
 
@@ -76,7 +80,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         foreach ($this->routers as $routers) {
             foreach ($routers as $router) {
                 try {
-                    $router->setContext($this->getContext());
+                    $router->setContext($this->context);
 
                     return $router->generate($name, $parameters, $referenceType);
                 } catch (RouteNotFoundException $e) {
