@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class RoutingBundle extends Bundle
+class BinsoulRoutingBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
