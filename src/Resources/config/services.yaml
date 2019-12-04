@@ -11,3 +11,6 @@ services:
     BinSoul\Symfony\Bundle\Routing\Repository\:
         resource: '../../Repository/*'
         public: true
+
+    BinSoul\Symfony\Bundle\Routing\EventListener\TablePrefixListener:
+        tags: ['doctrine.event_subscriber']
