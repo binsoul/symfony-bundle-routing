@@ -8,7 +8,7 @@ use BinSoul\Symfony\Bundle\Doctrine\Repository\AbstractRepository;
 use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
 use BinSoul\Symfony\Bundle\Routing\Entity\RouteEntity;
 use BinSoul\Symfony\Bundle\Routing\Entity\RouteTranslationEntity;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class RouteTranslationRepository extends AbstractRepository
 {

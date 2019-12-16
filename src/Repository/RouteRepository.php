@@ -7,7 +7,7 @@ namespace BinSoul\Symfony\Bundle\Routing\Repository;
 use BinSoul\Symfony\Bundle\Doctrine\Repository\AbstractRepository;
 use BinSoul\Symfony\Bundle\Routing\Entity\RouteEntity;
 use BinSoul\Symfony\Bundle\Website\Entity\WebsiteEntity;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class RouteRepository extends AbstractRepository
 {
