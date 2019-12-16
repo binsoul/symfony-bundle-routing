@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class OverrideRouterPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition(ChainRouter::class)) {
             return;
@@ -30,7 +30,7 @@ class OverrideRouterPass implements CompilerPassInterface
         $container->setAlias('router', ChainRouter::class);
 
         foreach ($container->findTaggedServiceIds('router') as $id => $attributes) {
-            $priority = isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0;
+            $priority = $attributes[0]['priority'] ?? 0;
 
             $definition->addMethodCall('addRouter', [new Reference($id), $priority]);
         }

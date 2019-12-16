@@ -69,7 +69,7 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         $this->context = $context ?: new RequestContext();
     }
 
-    public function generate($name, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generate($name, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         /** @var DomainEntity|null $domain */
         $domain = $parameters['domain'] ?? $this->getContext()->getParameter('domain');
