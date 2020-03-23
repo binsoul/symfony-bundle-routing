@@ -142,11 +142,11 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         $result = $domain->getUrl().'/'.ltrim($path, '/');
         $query = [];
         foreach ($parameters as $key => $value) {
-            if (\is_object($value) || \is_array($value)) {
-                continue;
-            }
-
             if (strpos($result, '{'.$key.'}') !== false) {
+                if (\is_object($value) || \is_array($value)) {
+                    continue;
+                }
+
                 $result = str_replace('{'.$key.'}', $value, $result);
             } else {
                 $query[$key] = $value;
