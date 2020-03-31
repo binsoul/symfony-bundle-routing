@@ -6,6 +6,7 @@ namespace BinSoul\Symfony\Bundle\Routing\Entity;
 
 use BinSoul\Symfony\Bundle\Website\Entity\WebsiteEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -199,7 +200,7 @@ class RouteEntity
     /**
      * @return RouteTranslationEntity[]|ArrayCollection
      */
-    public function getTranslations(): ArrayCollection
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
