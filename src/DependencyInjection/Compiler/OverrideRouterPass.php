@@ -26,7 +26,7 @@ class OverrideRouterPass implements CompilerPassInterface
 
         if ($container->hasAlias('router')) {
             $alias = $container->getAlias('router');
-            $definition->addMethodCall('addRouter', [new Reference($alias), 0]);
+            $definition->addMethodCall('addRouter', [new Reference((string) $alias), 0]);
         }
 
         $container->setAlias('router', ChainRouter::class);

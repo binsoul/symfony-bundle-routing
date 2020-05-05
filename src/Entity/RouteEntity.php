@@ -88,7 +88,7 @@ class RouteEntity
     private $isFollowable = true;
 
     /**
-     * @var RouteTranslationEntity[]|ArrayCollection
+     * @var RouteTranslationEntity[]|Collection<int, RouteTranslationEntity>
      * @ORM\OneToMany(targetEntity="\BinSoul\Symfony\Bundle\Routing\Entity\RouteTranslationEntity", mappedBy="route")
      */
     private $translations;
@@ -157,11 +157,17 @@ class RouteEntity
         $this->controller = $controller;
     }
 
+    /**
+     * @return mixed[]|null
+     */
     public function getParameters(): ?array
     {
         return $this->parameters;
     }
 
+    /**
+     * @param mixed[]|null $parameters
+     */
     public function setParameters(?array $parameters): void
     {
         $this->parameters = $parameters;
@@ -198,7 +204,7 @@ class RouteEntity
     }
 
     /**
-     * @return RouteTranslationEntity[]|ArrayCollection
+     * @return RouteTranslationEntity[]|Collection<int, RouteTranslationEntity>
      */
     public function getTranslations(): Collection
     {
