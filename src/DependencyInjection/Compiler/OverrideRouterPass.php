@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BinSoul\Symfony\Bundle\Routing\DependencyInjection\Compiler;
 
 use BinSoul\Symfony\Bundle\Routing\Router\ChainRouter;
@@ -12,7 +14,7 @@ class OverrideRouterPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->hasDefinition(ChainRouter::class)) {
+        if (! $container->hasDefinition(ChainRouter::class)) {
             return;
         }
 

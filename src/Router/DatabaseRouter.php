@@ -29,26 +29,32 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
      * @var RouteRepository
      */
     private $routeRepository;
+
     /**
      * @var RouteTranslationRepository
      */
     private $routeTranslationRepository;
+
     /**
      * @var DomainRepository
      */
     private $domainRepository;
+
     /**
      * @var RouteEntity[][]
      */
     private $routes = [];
+
     /**
      * @var RouteTranslationEntity[][][]
      */
     private $translations = [];
+
     /**
      * @var DomainEntity[]
      */
     private $domains = [];
+
     /**
      * @var RequestContext
      */
@@ -61,7 +67,7 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         RouteRepository $routeRepository,
         RouteTranslationRepository $routeTranslationRepository,
         DomainRepository $domainRepository,
-        RequestContext $context = null
+        ?RequestContext $context = null
     ) {
         $this->domainRepository = $domainRepository;
         $this->routeRepository = $routeRepository;
@@ -73,13 +79,15 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
     {
         /** @var DomainEntity|null $domain */
         $domain = $parameters['domain'] ?? $this->getContext()->getParameter('domain');
-        if ($domain === null || !($domain instanceof DomainEntity)) {
+
+        if ($domain === null || ! ($domain instanceof DomainEntity)) {
             throw new RouteNotFoundException('Domain parameter not set.');
         }
 
         /** @var LocaleEntity|null $locale */
         $locale = $parameters['locale'] ?? $this->getContext()->getParameter('locale');
-        if ($locale === null || !($locale instanceof LocaleEntity)) {
+
+        if ($locale === null || ! ($locale instanceof LocaleEntity)) {
             throw new RouteNotFoundException('Locale parameter not set.');
         }
 
@@ -90,7 +98,7 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
                 $domainWebsite = $domainEntity->getWebsite();
                 $domainLocale = $domainEntity->getDefaultLocale();
 
-                if (!$domainLocale) {
+                if (! $domainLocale) {
                     continue;
                 }
 
@@ -105,6 +113,7 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         $targetRoute = null;
 
         $routes = $this->loadRoutes($website);
+
         foreach ($routes as $route) {
             if ($route->getName() === $name) {
                 $targetRoute = $route;
@@ -139,34 +148,37 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
 
         $path = implode('/', $url);
 
-        $result = $domain->getUrl().'/'.ltrim($path, '/');
+        $result = $domain->getUrl() . '/' . ltrim($path, '/');
         $query = [];
+
         foreach ($parameters as $key => $value) {
-            if (strpos($result, '{'.$key.'}') !== false) {
+            if (strpos($result, '{' . $key . '}') !== false) {
                 if (\is_object($value) || \is_array($value)) {
                     continue;
                 }
 
-                $result = str_replace('{'.$key.'}', $value, $result);
+                $result = str_replace('{' . $key . '}', $value, $result);
             } else {
                 $query[$key] = $value;
             }
         }
 
-        return $result.(\count($query) ? '?'.http_build_query($query) : '');
+        return $result . (\count($query) ? '?' . http_build_query($query) : '');
     }
 
     public function matchRequest(Request $request)
     {
         /** @var DomainEntity|null $domain */
         $domain = $request->attributes->get('domain') ?? $this->getContext()->getParameter('domain');
-        if ($domain === null || !($domain instanceof DomainEntity)) {
+
+        if ($domain === null || ! ($domain instanceof DomainEntity)) {
             throw new RouteNotFoundException('Domain parameter not set.');
         }
 
         /** @var LocaleEntity|null $locale */
         $locale = $request->attributes->get('locale') ?? $this->getContext()->getParameter('locale') ?? $domain->getWebsite()->getDefaultLocale();
-        if ($locale === null || !($locale instanceof LocaleEntity)) {
+
+        if ($locale === null || ! ($locale instanceof LocaleEntity)) {
             throw new RouteNotFoundException('Locale parameter not set.');
         }
 
@@ -178,6 +190,7 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
 
         $domainPath = parse_url($domain->getUrl(), PHP_URL_PATH) ?? '';
         $domainPath = trim($domainPath, '/');
+
         if (stripos($path, $domainPath) === 0) {
             $path = substr($path, strlen($domainPath));
             $path = preg_replace('/\/+/', '/', $path);
@@ -185,11 +198,12 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         }
 
         $parts = explode('/', $path);
+
         if ($website->getLocaleType() === WebsiteEntity::LOCALE_TYPE_PATH && $parts[0] === $locale->getCode()) {
             array_shift($parts);
         }
 
-        if (!isset($parts[0]) || $parts[0] !== '') {
+        if (! isset($parts[0]) || $parts[0] !== '') {
             array_unshift($parts, '');
         }
 
@@ -205,9 +219,11 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         while (\count($parts) > 0) {
             $isMatch = false;
             $wildCardRoute = null;
+
             foreach ($translations as $translation) {
                 /** @var RouteTranslationEntity $translation */
                 $parent = $translation->getRoute()->getParent();
+
                 if ($parent === null) {
                     $targetID = null;
                 } else {
@@ -219,6 +235,7 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
                 }
 
                 $url = rtrim($translation->getSegment(), '/');
+
                 if ($url !== '' && strpos($url, '{') === 0) {
                     $wildCardRoute = $translation;
                 } elseif ($url === $parts[0]) {
@@ -290,10 +307,11 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
      */
     private function loadRoutes(WebsiteEntity $website): array
     {
-        if (!isset($this->routes[$website->getId()])) {
+        if (! isset($this->routes[$website->getId()])) {
             $this->routes[$website->getId()] = [];
 
             $routes = $this->routeRepository->findAllByWebsite($website);
+
             foreach ($routes as $route) {
                 $this->routes[$website->getId()][$route->getId()] = $route;
             }
@@ -307,16 +325,17 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
      */
     private function loadTranslations(WebsiteEntity $website, LocaleEntity $locale): array
     {
-        if (!isset($this->translations[$website->getId()])) {
+        if (! isset($this->translations[$website->getId()])) {
             $this->translations[$website->getId()] = [];
         }
 
-        if (!isset($this->translations[$website->getId()][$locale->getId()])) {
+        if (! isset($this->translations[$website->getId()][$locale->getId()])) {
             $this->translations[$website->getId()][$locale->getId()] = [];
 
             $routes = $this->loadRoutes($website);
             $translations = $this->routeTranslationRepository->findAllByLocale($locale);
             $translationsByRoute = [];
+
             foreach ($translations as $translation) {
                 if (isset($routes[$translation->getRoute()->getId()])) {
                     $translationsByRoute[$translation->getRoute()->getId()] = $translation;
@@ -324,7 +343,7 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
             }
 
             foreach ($routes as $route) {
-                if (!isset($translationsByRoute[$route->getId()])) {
+                if (! isset($translationsByRoute[$route->getId()])) {
                     $entity = new RouteTranslationEntity();
                     $entity->setLocale($locale);
                     $entity->setRoute($route);
@@ -358,22 +377,24 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         $uri = $pathInfo;
 
         $server = [];
+
         if ($context->getBaseUrl()) {
-            $uri = $context->getBaseUrl().$pathInfo;
+            $uri = $context->getBaseUrl() . $pathInfo;
             $server['SCRIPT_FILENAME'] = $context->getBaseUrl();
             $server['PHP_SELF'] = $context->getBaseUrl();
         }
 
         $host = $context->getHost() ?: 'localhost';
+
         if ($context->getScheme() === 'https' && $context->getHttpsPort() !== 443) {
-            $host .= ':'.$context->getHttpsPort();
+            $host .= ':' . $context->getHttpsPort();
         }
 
         if ($context->getScheme() === 'http' && $context->getHttpPort() !== 80) {
-            $host .= ':'.$context->getHttpPort();
+            $host .= ':' . $context->getHttpPort();
         }
 
-        $uri = $context->getScheme().'://'.$host.$uri.'?'.$context->getQueryString();
+        $uri = $context->getScheme() . '://' . $host . $uri . '?' . $context->getQueryString();
 
         return Request::create($uri, $context->getMethod(), $context->getParameters(), [], [], $server);
     }

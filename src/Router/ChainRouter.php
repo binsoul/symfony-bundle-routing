@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BinSoul\Symfony\Bundle\Routing\Router;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +23,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
      * @var RequestContext
      */
     private $context;
+
     /**
      * @var RouterInterface[][]
      */
@@ -29,23 +32,22 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(RequestContext $context = null)
+    public function __construct(?RequestContext $context = null)
     {
         $this->context = $context ?: new RequestContext();
     }
 
     /**
      * @param RouterInterface|RequestMatcherInterface|UrlGeneratorInterface $router
-     * @param int                                                           $priority
      */
-    public function addRouter($router, $priority = 0)
+    public function addRouter($router, int $priority = 0): void
     {
-        if (!$router instanceof RouterInterface && !($router instanceof RequestMatcherInterface && $router instanceof UrlGeneratorInterface)
+        if (! $router instanceof RouterInterface && ! ($router instanceof RequestMatcherInterface && $router instanceof UrlGeneratorInterface)
         ) {
             throw new \InvalidArgumentException(sprintf('%s is not a valid router.', get_class($router)));
         }
 
-        if (!isset($this->routers[$priority])) {
+        if (! isset($this->routers[$priority])) {
             $this->routers[$priority] = [];
             krsort($this->routers);
         }
@@ -95,6 +97,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
     public function getRouteCollection(): RouteCollection
     {
         $routeCollection = new RouteCollection();
+
         foreach ($this->routers as $routers) {
             foreach ($routers as $router) {
                 $router->setContext($this->getContext());
@@ -149,22 +152,24 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         $uri = $pathInfo;
 
         $server = [];
+
         if ($context->getBaseUrl()) {
-            $uri = $context->getBaseUrl().$pathInfo;
+            $uri = $context->getBaseUrl() . $pathInfo;
             $server['SCRIPT_FILENAME'] = $context->getBaseUrl();
             $server['PHP_SELF'] = $context->getBaseUrl();
         }
 
         $host = $context->getHost() ?: 'localhost';
+
         if ($context->getScheme() === 'https' && $context->getHttpsPort() !== 443) {
-            $host .= ':'.$context->getHttpsPort();
+            $host .= ':' . $context->getHttpsPort();
         }
 
         if ($context->getScheme() === 'http' && $context->getHttpPort() !== 80) {
-            $host .= ':'.$context->getHttpPort();
+            $host .= ':' . $context->getHttpPort();
         }
 
-        $uri = $context->getScheme().'://'.$host.$uri.'?'.$context->getQueryString();
+        $uri = $context->getScheme() . '://' . $host . $uri . '?' . $context->getQueryString();
 
         return Request::create($uri, $context->getMethod(), $context->getParameters(), [], [], $server);
     }

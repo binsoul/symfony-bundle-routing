@@ -64,7 +64,7 @@ class RouteEntity
     private $controller;
 
     /**
-     * @var array|null
+     * @var mixed[]|null
      * @ORM\Column(type="json", nullable=true, length=1024)
      */
     private $parameters;
@@ -117,12 +117,12 @@ class RouteEntity
         $this->website = $website;
     }
 
-    public function getParent(): ?RouteEntity
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(?RouteEntity $parent): void
+    public function setParent(?self $parent): void
     {
         $this->parent = $parent;
     }
