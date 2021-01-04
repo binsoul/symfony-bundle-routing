@@ -28,7 +28,7 @@
         "symfony/config": "^5",
         "symfony/dependency-injection": "^5",
         "symfony/http-kernel": "^5",
-        "twig/twig": "^3.0"
+        "twig/twig": "^3"
     },
     "require-dev": {
         "binsoul/coding-standard": "*@dev",
