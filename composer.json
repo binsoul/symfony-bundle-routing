@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "binsoul/common-i18n": "*@dev",
         "binsoul/common-i18n-intl": "*@dev",
         "binsoul/symfony-bundle-doctrine": "*@dev",
