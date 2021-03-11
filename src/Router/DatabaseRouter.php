@@ -162,6 +162,10 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
 
                 $result = str_replace('{' . $key . '}', $value, $result);
             } else {
+                if (\is_object($value) && ! method_exists($value, '__toString')) {
+                    continue;
+                }
+
                 $query[$key] = $value;
             }
         }
