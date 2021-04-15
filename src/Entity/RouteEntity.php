@@ -16,8 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="route",
  *     uniqueConstraints={
- *        @ORM\UniqueConstraint(columns={"website_id", "parent_id", "segment"}),
- *        @ORM\UniqueConstraint(columns={"website_id", "name"}),
+ *         @ORM\UniqueConstraint(columns={"website_id", "parent_id", "segment"}),
+ *         @ORM\UniqueConstraint(columns={"website_id", "name"}),
  *     }
  * )
  */
@@ -71,19 +71,19 @@ class RouteEntity
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = true})
+     * @ORM\Column(type="boolean", nullable=false, options={"default"=true})
      */
     private $isVisible = true;
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = true})
+     * @ORM\Column(type="boolean", nullable=false, options={"default"=true})
      */
     private $isIndexable = true;
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = true})
+     * @ORM\Column(type="boolean", nullable=false, options={"default"=true})
      */
     private $isFollowable = true;
 

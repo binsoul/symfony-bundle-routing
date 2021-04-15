@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\Routing\Router;
 
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
@@ -44,7 +45,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
     {
         if (! $router instanceof RouterInterface && ! ($router instanceof RequestMatcherInterface && $router instanceof UrlGeneratorInterface)
         ) {
-            throw new \InvalidArgumentException(sprintf('%s is not a valid router.', get_class($router)));
+            throw new InvalidArgumentException(sprintf('%s is not a valid router.', get_class($router)));
         }
 
         if (! isset($this->routers[$priority])) {

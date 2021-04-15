@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="route_translation",
  *     uniqueConstraints={
- *        @ORM\UniqueConstraint(columns={"route_id", "locale_id"}),
+ *         @ORM\UniqueConstraint(columns={"route_id", "locale_id"}),
  *     }
  * )
  */
