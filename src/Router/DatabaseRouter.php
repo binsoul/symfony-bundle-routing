@@ -160,7 +160,7 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
                     continue;
                 }
 
-                $result = str_replace('{' . $key . '}', $value, $result);
+                $result = str_replace('{' . $key . '}', (string) $value, $result);
             } else {
                 if (\is_object($value) && ! method_exists($value, '__toString')) {
                     continue;
