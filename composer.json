@@ -18,22 +18,22 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
+        "php": "^7.4 || ^8.0",
         "binsoul/common-i18n": "*@dev",
         "binsoul/common-i18n-intl": "*@dev",
         "binsoul/symfony-bundle-doctrine": "*@dev",
         "binsoul/symfony-bundle-i18n": "*@dev",
         "binsoul/symfony-bundle-website": "*@dev",
         "doctrine/orm": "^2",
-        "symfony/config": "^5",
-        "symfony/dependency-injection": "^5",
-        "symfony/http-kernel": "^5",
+        "symfony/config": "^5 || ^6",
+        "symfony/dependency-injection": "^5 || ^6",
+        "symfony/http-kernel": "^5 || ^6",
         "twig/twig": "^3"
     },
     "require-dev": {
         "binsoul/coding-standard": "^1",
-        "phpstan/phpstan": "^0.12",
-        "symplify/easy-coding-standard-prefixed": "^9"
+        "phpstan/phpstan": "^1",
+        "symplify/easy-coding-standard": "^10"
     },
     "autoload": {
         "psr-4": {
