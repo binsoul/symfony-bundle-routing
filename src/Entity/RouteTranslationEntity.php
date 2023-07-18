@@ -5,48 +5,44 @@ declare(strict_types=1);
 namespace BinSoul\Symfony\Bundle\Routing\Entity;
 
 use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Represents a translation of a route.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="route_translation",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"route_id", "locale_id"}),
- *     }
- * )
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'route_translation')]
+#[ORM\UniqueConstraint(columns: ['route_id', 'locale_id'])]
 class RouteTranslationEntity
 {
     /**
      * @var int|null ID of the translation
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id;
 
     /**
      * @var RouteEntity Route of the translation
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\Routing\Entity\RouteEntity", inversedBy="translations")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $route;
+    #[ORM\ManyToOne(targetEntity: RouteEntity::class, inversedBy: 'translations')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private RouteEntity $route;
 
     /**
      * @var LocaleEntity Locale of the translation
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity")
-     * @ORM\JoinColumn(nullable=false)
      */
-    private $locale;
+    #[ORM\ManyToOne(targetEntity: LocaleEntity::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private LocaleEntity $locale;
 
     /**
      * @var string Path segment of the route
-     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $segment;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private string $segment;
 
     /**
      * Constructs an instance of this class.

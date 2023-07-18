@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class BinsoulRoutingExtension extends Extension
 {
     /**
-     * @param mixed[] $configs
+     * @param array $configs
      */
     public function load(array $configs, ContainerBuilder $container): void
     {

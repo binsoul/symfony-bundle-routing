@@ -20,15 +20,12 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableInterface
 {
-    /**
-     * @var RequestContext
-     */
-    private $context;
+    private RequestContext $context;
 
     /**
      * @var RouterInterface[][]
      */
-    private $routers = [];
+    private array $routers = [];
 
     /**
      * Constructs an instance of this class.
@@ -38,14 +35,11 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         $this->context = $context ?: new RequestContext();
     }
 
-    /**
-     * @param RouterInterface|RequestMatcherInterface|UrlGeneratorInterface $router
-     */
-    public function addRouter($router, int $priority = 0): void
+    public function addRouter(RouterInterface|RequestMatcherInterface|UrlGeneratorInterface $router, int $priority = 0): void
     {
         if (! $router instanceof RouterInterface && ! ($router instanceof RequestMatcherInterface && $router instanceof UrlGeneratorInterface)
         ) {
-            throw new InvalidArgumentException(sprintf('%s is not a valid router.', get_class($router)));
+            throw new InvalidArgumentException(sprintf('%s is not a valid router.', $router::class));
         }
 
         if (! isset($this->routers[$priority])) {
@@ -67,17 +61,17 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
     }
 
     /**
-     * @return mixed[]
+     * @return array
      */
-    public function match(string $pathInfo): array
+    public function match(string $pathinfo): array
     {
-        $request = $this->rebuildRequest($pathInfo);
+        $request = $this->rebuildRequest($pathinfo);
 
-        return $this->handleMatch($pathInfo, $request);
+        return $this->handleMatch($pathinfo, $request);
     }
 
     /**
-     * @return mixed[]
+     * @return array
      */
     public function matchRequest(Request $request): array
     {
@@ -85,7 +79,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
     }
 
     /**
-     * @param mixed[] $parameters
+     * @param array $parameters
      */
     public function generate(string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
@@ -95,7 +89,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
                     $router->setContext($this->context);
 
                     return $router->generate($name, $parameters, $referenceType);
-                } catch (RouteNotFoundException $e) {
+                } catch (RouteNotFoundException) {
                     // ignore
                 }
             }
@@ -119,7 +113,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         return $routeCollection;
     }
 
-    public function warmUp(string $cacheDir): void
+    public function warmUp(string $cacheDir): array
     {
         foreach ($this->routers as $routers) {
             foreach ($routers as $router) {
@@ -128,10 +122,12 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
                 }
             }
         }
+
+        return [];
     }
 
     /**
-     * @return mixed[]
+     * @return array
      */
     private function handleMatch(string $pathInfo, Request $request): array
     {
@@ -147,10 +143,10 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
                     }
 
                     return $router->match($pathInfo);
-                } catch (RouteNotFoundException $e) {
+                } catch (RouteNotFoundException) {
                     // ignore
-                } catch (MethodNotAllowedException $e) {
-                    $methodNotAllowed = $e;
+                } catch (MethodNotAllowedException $methodNotAllowedException) {
+                    $methodNotAllowed = $methodNotAllowedException;
                 }
             }
         }
@@ -166,7 +162,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
 
         $server = [];
 
-        if ($context->getBaseUrl()) {
+        if ($context->getBaseUrl() !== '') {
             $uri = $context->getBaseUrl() . $pathInfo;
             $server['SCRIPT_FILENAME'] = $context->getBaseUrl();
             $server['PHP_SELF'] = $context->getBaseUrl();

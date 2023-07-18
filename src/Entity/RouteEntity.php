@@ -7,91 +7,78 @@ namespace BinSoul\Symfony\Bundle\Routing\Entity;
 use BinSoul\Symfony\Bundle\Website\Entity\WebsiteEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Represents a route.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="route",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"website_id", "parent_id", "segment"}),
- *         @ORM\UniqueConstraint(columns={"website_id", "name"}),
- *     }
- * )
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'route')]
+#[ORM\UniqueConstraint(columns: ['website_id', 'parent_id', 'segment'])]
+#[ORM\UniqueConstraint(columns: ['website_id', 'name'])]
 class RouteEntity
 {
     /**
      * @var int|null ID of the route
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id;
 
     /**
      * @var WebsiteEntity Website of the route
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\Website\Entity\WebsiteEntity")
-     * @ORM\JoinColumn(nullable=false)
      */
-    private $website;
+    #[ORM\ManyToOne(targetEntity: WebsiteEntity::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private WebsiteEntity $website;
 
     /**
      * @var RouteEntity|null Parent of the route
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\Routing\Entity\RouteEntity")
-     * @ORM\JoinColumn(nullable=true)
      */
-    private $parent;
+    #[ORM\ManyToOne(targetEntity: RouteEntity::class)]
+    #[ORM\JoinColumn]
+    private ?self $parent = null;
 
     /**
      * @var string Name of the route
-     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $name;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private string $name;
 
     /**
      * @var string Path segment of the route
-     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $segment;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private string $segment;
 
     /**
      * @var string|null Controller of the route
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $controller;
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private ?string $controller = null;
 
     /**
-     * @var mixed[]|null
-     * @ORM\Column(type="json", nullable=true, length=1024)
+     * @var array|null
      */
-    private $parameters;
+    #[ORM\Column(type: Types::JSON, length: 1024, nullable: true)]
+    private ?array $parameters = null;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean", nullable=false, options={"default"=true})
-     */
-    private $isVisible = true;
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    private bool $isVisible = true;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean", nullable=false, options={"default"=true})
-     */
-    private $isIndexable = true;
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    private bool $isIndexable = true;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean", nullable=false, options={"default"=true})
-     */
-    private $isFollowable = true;
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    private bool $isFollowable = true;
 
     /**
      * @var RouteTranslationEntity[]|Collection<int, RouteTranslationEntity>
-     * @ORM\OneToMany(targetEntity="\BinSoul\Symfony\Bundle\Routing\Entity\RouteTranslationEntity", mappedBy="route")
      */
-    private $translations;
+    #[ORM\OneToMany(mappedBy: 'route', targetEntity: RouteTranslationEntity::class)]
+    private Collection $translations;
 
     /**
      * Constructs an instance of this class.
@@ -158,7 +145,7 @@ class RouteEntity
     }
 
     /**
-     * @return mixed[]|null
+     * @return array|null
      */
     public function getParameters(): ?array
     {
@@ -166,7 +153,7 @@ class RouteEntity
     }
 
     /**
-     * @param mixed[]|null $parameters
+     * @param array|null $parameters
      */
     public function setParameters(?array $parameters): void
     {
