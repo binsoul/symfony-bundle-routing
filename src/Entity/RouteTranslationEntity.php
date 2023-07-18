@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'route_translation')]
 #[ORM\UniqueConstraint(columns: ['route_id', 'locale_id'])]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class RouteTranslationEntity
 {
     /**

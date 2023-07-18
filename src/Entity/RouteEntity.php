@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'route')]
 #[ORM\UniqueConstraint(columns: ['website_id', 'parent_id', 'segment'])]
 #[ORM\UniqueConstraint(columns: ['website_id', 'name'])]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class RouteEntity
 {
     /**
