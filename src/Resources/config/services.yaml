@@ -13,4 +13,4 @@ services:
         public: true
 
     BinSoul\Symfony\Bundle\Routing\EventListener\TablePrefixListener:
-        tags: ['doctrine.event_subscriber']
+        public: true
