@@ -60,9 +60,6 @@ class RouteEntity
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $controller = null;
 
-    /**
-     * @var array|null
-     */
     #[ORM\Column(type: Types::JSON, length: 1024, nullable: true)]
     private ?array $parameters = null;
 
@@ -145,9 +142,6 @@ class RouteEntity
         $this->controller = $controller;
     }
 
-    /**
-     * @return array|null
-     */
     public function getParameters(): ?array
     {
         return $this->parameters;

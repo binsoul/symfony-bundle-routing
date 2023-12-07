@@ -60,9 +60,6 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         $this->context = $context;
     }
 
-    /**
-     * @return array
-     */
     public function match(string $pathinfo): array
     {
         $request = $this->rebuildRequest($pathinfo);
@@ -70,17 +67,11 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         return $this->handleMatch($pathinfo, $request);
     }
 
-    /**
-     * @return array
-     */
     public function matchRequest(Request $request): array
     {
         return $this->handleMatch($request->getPathInfo(), $request);
     }
 
-    /**
-     * @param array $parameters
-     */
     public function generate(string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         foreach ($this->routers as $routers) {
@@ -126,9 +117,6 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         return [];
     }
 
-    /**
-     * @return array
-     */
     private function handleMatch(string $pathInfo, Request $request): array
     {
         $methodNotAllowed = null;

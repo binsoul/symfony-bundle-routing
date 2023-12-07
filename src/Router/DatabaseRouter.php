@@ -25,11 +25,11 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class DatabaseRouter implements RouterInterface, RequestMatcherInterface
 {
-    private RouteRepository $routeRepository;
+    private readonly RouteRepository $routeRepository;
 
-    private RouteTranslationRepository $routeTranslationRepository;
+    private readonly RouteTranslationRepository $routeTranslationRepository;
 
-    private DomainRepository $domainRepository;
+    private readonly DomainRepository $domainRepository;
 
     /**
      * @var RouteEntity[][]
@@ -63,9 +63,6 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         $this->context = $context ?: new RequestContext();
     }
 
-    /**
-     * @param array $parameters
-     */
     public function generate(string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         /** @var DomainEntity|null $domain */
@@ -161,9 +158,6 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         return $result . (count($query) ? '?' . http_build_query($query) : '');
     }
 
-    /**
-     * @return array
-     */
     public function matchRequest(Request $request): array
     {
         /** @var DomainEntity|null $domain */
@@ -210,7 +204,6 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         $parentID = null;
         /** @var RouteTranslationEntity|null $route */
         $route = null;
-        /** @var RouteTranslationEntity|null $wildCardRoute */
         $wildCardParameters = [];
 
         while ($parts !== []) {
@@ -275,9 +268,6 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         throw new RouteNotFoundException(sprintf('No route found with path "%s".', $request->getPathInfo()));
     }
 
-    /**
-     * @return array
-     */
     public function match(string $pathinfo): array
     {
         return $this->matchRequest($this->rebuildRequest($pathinfo));
