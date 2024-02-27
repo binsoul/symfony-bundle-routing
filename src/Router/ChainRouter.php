@@ -104,12 +104,12 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         return $routeCollection;
     }
 
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         foreach ($this->routers as $routers) {
             foreach ($routers as $router) {
                 if ($router instanceof WarmableInterface) {
-                    $router->warmUp($cacheDir);
+                    $router->warmUp($cacheDir, $buildDir);
                 }
             }
         }
