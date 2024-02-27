@@ -23,7 +23,7 @@ class BinsoulRoutingBundle extends Bundle
         if (class_exists($ormCompilerClass)) {
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createAttributeMappingDriver(
-                    ['BinSoul\Symfony\Bundle\Website'],
+                    ['BinSoul\Symfony\Bundle\Routing'],
                     [realpath(__DIR__.'/Entity')],
                 )
             );
