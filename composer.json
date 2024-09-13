@@ -18,16 +18,16 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": ">=8.1",
         "binsoul/common-i18n": "*@dev",
         "binsoul/common-i18n-intl": "*@dev",
         "binsoul/symfony-bundle-doctrine": "*@dev",
         "binsoul/symfony-bundle-i18n": "*@dev",
         "binsoul/symfony-bundle-website": "*@dev",
         "doctrine/orm": "^2",
-        "symfony/config": "^5 || ^6",
-        "symfony/dependency-injection": "^5 || ^6",
-        "symfony/http-kernel": "^5 || ^6",
+        "symfony/config": "^6 || ^7",
+        "symfony/dependency-injection": "^6 || ^7",
+        "symfony/http-kernel": "^6 || ^7",
         "twig/twig": "^3"
     },
     "require-dev": {
