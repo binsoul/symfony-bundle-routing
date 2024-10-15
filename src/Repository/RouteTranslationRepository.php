@@ -10,6 +10,9 @@ use BinSoul\Symfony\Bundle\Routing\Entity\RouteEntity;
 use BinSoul\Symfony\Bundle\Routing\Entity\RouteTranslationEntity;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends AbstractRepository<RouteTranslationEntity>
+ */
 class RouteTranslationRepository extends AbstractRepository
 {
     /**

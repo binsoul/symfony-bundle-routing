@@ -23,7 +23,7 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
     private RequestContext $context;
 
     /**
-     * @var RouterInterface[][]
+     * @var array<int, array<int, RouterInterface|RequestMatcherInterface|UrlGeneratorInterface>>
      */
     private array $routers = [];
 
@@ -60,6 +60,9 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         $this->context = $context;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function match(string $pathinfo): array
     {
         $request = $this->rebuildRequest($pathinfo);
@@ -67,15 +70,25 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         return $this->handleMatch($pathinfo, $request);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function matchRequest(Request $request): array
     {
         return $this->handleMatch($request->getPathInfo(), $request);
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function generate(string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         foreach ($this->routers as $routers) {
             foreach ($routers as $router) {
+                if (! ($router instanceof RouterInterface)) {
+                    continue;
+                }
+
                 try {
                     $router->setContext($this->context);
 
@@ -95,6 +108,10 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
 
         foreach ($this->routers as $routers) {
             foreach ($routers as $router) {
+                if (! ($router instanceof RouterInterface)) {
+                    continue;
+                }
+
                 $router->setContext($this->getContext());
 
                 $routeCollection->addCollection($router->getRouteCollection());
@@ -117,12 +134,19 @@ class ChainRouter implements RouterInterface, RequestMatcherInterface, WarmableI
         return [];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function handleMatch(string $pathInfo, Request $request): array
     {
         $methodNotAllowed = null;
 
         foreach ($this->routers as $routers) {
             foreach ($routers as $router) {
+                if (! ($router instanceof RouterInterface)) {
+                    continue;
+                }
+
                 try {
                     $router->setContext($this->getContext());
 

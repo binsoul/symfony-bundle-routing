@@ -38,7 +38,7 @@ class RouteEntity
     /**
      * @var RouteEntity|null Parent of the route
      */
-    #[ORM\ManyToOne(targetEntity: RouteEntity::class)]
+    #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn]
     private ?self $parent = null;
 
@@ -60,6 +60,9 @@ class RouteEntity
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $controller = null;
 
+    /**
+     * @var array<string, mixed>|null Parameters of the route
+     */
     #[ORM\Column(type: Types::JSON, length: 1024, nullable: true)]
     private ?array $parameters = null;
 
@@ -73,9 +76,9 @@ class RouteEntity
     private bool $isFollowable = true;
 
     /**
-     * @var RouteTranslationEntity[]|Collection<int, RouteTranslationEntity>
+     * @var Collection<int, RouteTranslationEntity>
      */
-    #[ORM\OneToMany(mappedBy: 'route', targetEntity: RouteTranslationEntity::class)]
+    #[ORM\OneToMany(targetEntity: RouteTranslationEntity::class, mappedBy: 'route')]
     private Collection $translations;
 
     /**
@@ -142,13 +145,16 @@ class RouteEntity
         $this->controller = $controller;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getParameters(): ?array
     {
         return $this->parameters;
     }
 
     /**
-     * @param array|null $parameters
+     * @param array<string, mixed>|null $parameters
      */
     public function setParameters(?array $parameters): void
     {
@@ -186,7 +192,7 @@ class RouteEntity
     }
 
     /**
-     * @return RouteTranslationEntity[]|Collection<int, RouteTranslationEntity>
+     * @return Collection<int, RouteTranslationEntity>
      */
     public function getTranslations(): Collection
     {

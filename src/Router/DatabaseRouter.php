@@ -63,6 +63,9 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         $this->context = $context ?: new RequestContext();
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function generate(string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         /** @var DomainEntity|null $domain */
@@ -158,6 +161,9 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         return $result . (count($query) ? '?' . http_build_query($query) : '');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function matchRequest(Request $request): array
     {
         /** @var DomainEntity|null $domain */
@@ -211,7 +217,6 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
             $wildCardRoute = null;
 
             foreach ($translations as $translation) {
-                /** @var RouteTranslationEntity $translation */
                 $parent = $translation->getRoute()->getParent();
 
                 $targetID = $parent?->getId();
@@ -268,6 +273,9 @@ class DatabaseRouter implements RouterInterface, RequestMatcherInterface
         throw new RouteNotFoundException(sprintf('No route found with path "%s".', $request->getPathInfo()));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function match(string $pathinfo): array
     {
         return $this->matchRequest($this->rebuildRequest($pathinfo));

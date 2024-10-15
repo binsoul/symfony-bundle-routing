@@ -24,7 +24,7 @@ class BinsoulRoutingBundle extends Bundle
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createAttributeMappingDriver(
                     ['BinSoul\Symfony\Bundle\Routing'],
-                    [realpath(__DIR__.'/Entity')],
+                    [(string) realpath(__DIR__ . '/Entity')],
                 )
             );
         }

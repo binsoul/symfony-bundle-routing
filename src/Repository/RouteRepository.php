@@ -9,6 +9,9 @@ use BinSoul\Symfony\Bundle\Routing\Entity\RouteEntity;
 use BinSoul\Symfony\Bundle\Website\Entity\WebsiteEntity;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends AbstractRepository<RouteEntity>
+ */
 class RouteRepository extends AbstractRepository
 {
     /**
