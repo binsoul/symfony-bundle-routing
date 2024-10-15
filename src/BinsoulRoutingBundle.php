@@ -6,8 +6,10 @@ namespace BinSoul\Symfony\Bundle\Routing;
 
 use BinSoul\Symfony\Bundle\Routing\DependencyInjection\Compiler\OverrideRouterPass;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class BinsoulRoutingBundle extends Bundle
@@ -18,15 +20,18 @@ class BinsoulRoutingBundle extends Bundle
 
         $container->addCompilerPass(new OverrideRouterPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -16);
 
-        $ormCompilerClass = 'Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass';
+        $container->addCompilerPass(
+            $this->buildDoctrineOrmMappingsPass(
+                ['BinSoul\Symfony\Bundle\Routing'],
+                [(string) realpath(__DIR__ . '/Entity')],
+            )
+        );
+    }
 
-        if (class_exists($ormCompilerClass)) {
-            $container->addCompilerPass(
-                DoctrineOrmMappingsPass::createAttributeMappingDriver(
-                    ['BinSoul\Symfony\Bundle\Routing'],
-                    [(string) realpath(__DIR__ . '/Entity')],
-                )
-            );
-        }
+    private function buildDoctrineOrmMappingsPass(array $namespaces, array $directories): DoctrineOrmMappingsPass
+    {
+        $driver = new Definition(AttributeDriver::class, [$directories]);
+
+        return new DoctrineOrmMappingsPass($driver, $namespaces, [], false, []);
     }
 }
